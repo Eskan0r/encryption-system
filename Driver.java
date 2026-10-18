@@ -103,6 +103,7 @@ public class Driver {
             sendToEncrypt("PASS " + password.toUpperCase());
             String response = readFromEncrypt();
             log("COMMAND", "password set");
+            log("RESULT", response);
             System.out.println(response);
         }
     }
@@ -133,6 +134,7 @@ public class Driver {
             sendToEncrypt(encCmd + text.toUpperCase());
             String response = readFromEncrypt();
             log("COMMAND", cmd + " " + text);
+            log("RESULT", response);
             System.out.println(response);
 
             if (response.startsWith("RESULT ")) {
