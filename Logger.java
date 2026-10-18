@@ -10,8 +10,8 @@ public class Logger {
             System.exit(1);
         }
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(args[0], true))) {
-            Scanner scanner = new Scanner(System.in);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(args[0], true));
+             Scanner scanner = new Scanner(System.in)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
             while (scanner.hasNextLine()) {

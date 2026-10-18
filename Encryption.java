@@ -4,42 +4,41 @@ public class Encryption {
     private static String passkey = null;
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
+                if (line.isEmpty()) continue;
 
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine().trim();
-            if (line.isEmpty()) continue;
+                String[] parts = line.split("\\s+", 2);
+                String command = parts[0].toUpperCase();
+                String argument = parts.length > 1 ? parts[1] : "";
 
-            String[] parts = line.split("\\s+", 2);
-            String command = parts[0].toUpperCase();
-            String argument = parts.length > 1 ? parts[1] : "";
-
-            switch (command) {
-                case "PASS":
-                    passkey = argument;
-                    System.out.println("RESULT");
-                    break;
-                case "ENCRYPT":
-                    if (passkey == null) {
-                        System.out.println("ERROR Password not set");
-                    } else {
-                        System.out.println("RESULT " + vigenere(argument, passkey, true));
-                    }
-                    break;
-                case "DECRYPT":
-                    if (passkey == null) {
-                        System.out.println("ERROR Password not set");
-                    } else {
-                        System.out.println("RESULT " + vigenere(argument, passkey, false));
-                    }
-                    break;
-                case "QUIT":
-                    scanner.close();
-                    return;
-                default:
-                    System.out.println("ERROR Unknown command");
+                switch (command) {
+                    case "PASS":
+                        passkey = argument;
+                        System.out.println("RESULT");
+                        break;
+                    case "ENCRYPT":
+                        if (passkey == null) {
+                            System.out.println("ERROR Password not set");
+                        } else {
+                            System.out.println("RESULT " + vigenere(argument, passkey, true));
+                        }
+                        break;
+                    case "DECRYPT":
+                        if (passkey == null) {
+                            System.out.println("ERROR Password not set");
+                        } else {
+                            System.out.println("RESULT " + vigenere(argument, passkey, false));
+                        }
+                        break;
+                    case "QUIT":
+                        return;
+                    default:
+                        System.out.println("ERROR Unknown command");
+                }
+                System.out.flush();
             }
-            System.out.flush();
         }
     }
 
