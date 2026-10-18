@@ -197,6 +197,9 @@ public class Driver {
 
     private static void cleanup() {
         try {
+            if (toLogger != null) {
+                log("EXIT", "Driver exiting");
+            }
             if (toEncrypt != null) {
                 toEncrypt.println("QUIT");
                 toEncrypt.flush();
