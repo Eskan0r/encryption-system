@@ -31,3 +31,17 @@ The menu loop presents the five commands. For password, encrypt, and decrypt, th
 I tested the full flow: set password HELLO, encrypt HELLO, and got OIWWC back which matches the spec example exactly. The log file correctly shows the START entry and each command.
 
 I noticed one issue to fix - the history selection needs testing with the cancel option, and I should verify error handling for non-letter input.
+
+# 10-18-2026 5:35pm
+
+Testing today revealed a few things I needed to address. First, I confirmed error handling works - trying to encrypt "Hello World!" properly returns an error since only letters are allowed. I also tested the history selection menu including the cancel option and empty history case.
+
+One thing I had to fix was that the spec requires both commands and their results to be logged. I was logging commands but not the responses from the encryption program. Added logging for RESULT responses - but made sure passwords themselves never appear in the log, only "password set".
+
+On processes: the Driver uses Java's ProcessBuilder to spawn Logger and Encryption as independent OS processes. Each has its own PID and memory space. The driver waits for them to terminate during cleanup after sending QUIT.
+
+On pipes: the connection is set up through the process streams. The child's stdin becomes the read end of a pipe the parent writes to, and the child's stdout becomes the write end of a pipe the parent reads from. In Java this is abstracted as streams but underneath these are actual OS pipes. The flush() calls are important since PrintWriters can buffer - without flushing, the child processes would block waiting for input.
+
+Problems encountered: initial testing showed my test input sequences were misaligned, which made it look like bugs when it was actually my test harness. Real bugs found: missing result logging, and needing to verify the cancel path in history selection. Both fixed.
+
+The whole system now works end to end: set password, encrypt, decrypt, view history, with everything properly logged. The Vigenère implementation matches the spec example (HELLO with key HELLO gives OIWWC).
