@@ -19,3 +19,15 @@ I've implemented the encryption program and logger. The encryption program handl
 Testing the encryption locally with some sample input showed it works correctly. The logger also produces properly formatted output.
 
 Next session I'll implement the driver program to launch both processes and wire up the pipes.
+
+# 10-18-2026 5:10pm
+
+Today I implemented the driver program. This was the most complex part since it needs to launch both child processes and manage the pipes connecting them.
+
+Using Java's ProcessBuilder, I launch Logger with the log file name as an argument and Encryption with no arguments. I grab their stdin/stdout streams and wrap them in PrintWriters and Scanners for easy line-based communication.
+
+The menu loop presents the five commands. For password, encrypt, and decrypt, the driver first asks whether to enter a new string or pick from history. Passwords are never stored in history per the spec, and all commands plus their results get logged.
+
+I tested the full flow: set password HELLO, encrypt HELLO, and got OIWWC back which matches the spec example exactly. The log file correctly shows the START entry and each command.
+
+I noticed one issue to fix - the history selection needs testing with the cancel option, and I should verify error handling for non-letter input.
